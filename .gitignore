@@ -1,0 +1,8 @@
+__pycache__/
+artifacts/
+*.pkl
+*.keras
+*.json
+.ipynb_checkpoints/
+.env
+.DS_Store
