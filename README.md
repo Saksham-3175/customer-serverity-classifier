@@ -1,83 +1,78 @@
 # Customer Complaint Severity Classification
 
-## 🎯 Objective
-Train a deep learning model to classify **customer complaint severity** into `low`, `medium`, or `high`.  
-The model is then exposed through a **FastAPI** endpoint for integration with a dashboard or any frontend system.
+## Objective
+
+Train a deep learning model to classify customer complaint severity into `low`, `medium`, or `high`.
+The trained model is exposed through a FastAPI service for integration with frontend or dashboard systems.
 
 ---
 
-## 🧠 Project Overview
+## Project Overview
 
 ### Pipeline
-1. **Data Preprocessing** — Clean complaint narratives, remove noise, and normalize text.  
-2. **Weak Supervision** — Generate pseudo-labels (`low`, `medium`, `high`) using TextBlob polarity and escalation keywords.  
-3. **Deep Learning Model** — Train a Bidirectional LSTM classifier using TensorFlow/Keras.  
-4. **Evaluation & Visualization** — Plot accuracy/loss, confusion matrix, class distribution, and word clouds.  
-5. **Deployment** — Convert trained model into a **FastAPI** inference service.  
-6. **Dashboard Integration** — Frontend consumes the API endpoint to visualize and prioritize complaints.
+
+1. **Data Preprocessing** – Clean complaint text, remove noise, and normalize text.
+2. **Weak Supervision** – Generate pseudo-labels (`low`, `medium`, `high`) using sentiment polarity and escalation keywords.
+3. **Model Training** – Train a Bidirectional LSTM classifier using TensorFlow/Keras.
+4. **Evaluation** – Assess model performance using accuracy, F1-score, and confusion matrix.
+5. **Deployment** – Serve the trained model via FastAPI.
+6. **Frontend Integration** – The development frontend consumes the API endpoint for severity visualization.
 
 ---
 
-## 🧩 Repository Structure
+## Setup Instructions
 
-```
-customer-severity-classifier/
-│
-├── data/
-│   ├── complaints_raw.csv
-│   └── complaints_processed.csv
-│
-├── notebooks/
-│   └── severity_classifier_tf_viz.ipynb
-│
-├── artifacts/
-│   ├── severity_lstm_tf.keras
-│   ├── severity_lstm_tf_tokenizer.pkl
-│   └── severity_lstm_tf_labels.json
-│
-├── src/
-│   ├── data_prep.py
-│   ├── model_train.py
-│   ├── evaluate.py
-│   └── infer.py
-│
-├── api/
-│   ├── main.py
-│   ├── schemas.py
-│   └── utils.py
-│
-├── dashboard/
-│   └── README.md
-│
-├── requirements.txt
-├── README.md
-└── .gitignore
-```
+### 1. Environment Setup
 
----
+Create and activate a virtual environment:
 
-## 🚀 Setup Instructions
-
-### 1. Create environment
 ```bash
 python -m venv venv
-source venv/bin/activate  # Linux/Mac
-venv\Scripts\activate   # Windows
+source venv/bin/activate        # Linux/Mac
+venv\Scripts\activate           # Windows
+```
+
+Install dependencies:
+
+```bash
 pip install -r requirements.txt
 ```
 
-### 2. Train model
-Open `notebooks/severity_classifier_tf_viz.ipynb` and run all cells.  
-Artifacts (model, tokenizer, labels) will be saved in `artifacts/`.
+For development setup:
 
-### 3. Run API
 ```bash
-uvicorn api.main:app --reload
+pip install -r requirements-dev.txt
 ```
-Access the API docs at: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
+
+---
+
+### 2. Run the API
+
+Start the FastAPI server:
+
+```bash
+python -m uvicorn app:app --reload
+```
+
+Access API documentation at:
+[http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
+
+---
+
+### 3. Run the Frontend
+
+Use a simple Python web server to serve the frontend:
+
+```bash
+python -m http.server 5500
+```
+
+> **Note:** If you change the frontend port, update it in `./app.py` accordingly.
 
 ### 4. Example API request
+
 **POST** `/predict`
+
 ```json
 {
   "text": "My account was closed without prior notice."
@@ -85,6 +80,7 @@ Access the API docs at: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
 ```
 
 **Response**
+
 ```json
 {
   "severity": "high",
@@ -94,7 +90,8 @@ Access the API docs at: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
 
 ---
 
-## 🧮 Model Details
+## Model Details
+
 - Architecture: **Bidirectional LSTM**
 - Embedding Dim: `128`
 - LSTM Units: `96`
@@ -102,58 +99,5 @@ Access the API docs at: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
 - Loss: `SparseCategoricalCrossentropy`
 - Optimizer: `Adam`
 - Evaluation: Accuracy, F1-score, Confusion Matrix
-
----
-
-## 📊 Visualizations
-- Accuracy vs Validation Accuracy  
-- Loss vs Validation Loss  
-- Confusion Matrix Heatmap  
-- Class Distribution Plot  
-- WordClouds per severity level
-
----
-
-## 🧠 API Structure
-
-| Endpoint | Method | Description |
-|-----------|---------|-------------|
-| `/` | GET | Health check |
-| `/predict` | POST | Predicts severity from complaint text |
-
----
-
-## 👥 Team Workflow
-
-| Role | Responsibility |
-|------|----------------|
-| **Model Team** | Train and optimize LSTM model |
-| **API Team** | Serve model via FastAPI |
-| **Dashboard Team** | Consume `/predict` endpoint and visualize results |
-
----
-
-## ⚙️ Tech Stack
-- Python 3.10+  
-- TensorFlow / Keras  
-- TextBlob  
-- FastAPI  
-- Matplotlib / Seaborn / WordCloud  
-
----
-
-## 📁 Outputs
-- `severity_lstm_tf.keras` — model weights  
-- `severity_lstm_tf_tokenizer.pkl` — tokenizer object  
-- `severity_lstm_tf_labels.json` — label mappings  
-- `/predict` API endpoint for real-time inference
-
----
-
-## 🧩 Future Improvements
-- Move from LSTM → Transformer-based model (DistilBERT)  
-- Add confidence calibration and explainability layer  
-- Containerize API using Docker  
-- Integrate continuous retraining pipeline (CI/CD)
 
 ---
