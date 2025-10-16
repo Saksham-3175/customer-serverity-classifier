@@ -1,0 +1,28 @@
+from fastapi import APIRouter
+from schema.pydantic_system import (
+    MessageResponse,
+    MessageData,
+    HealthResponse,
+    HealthData,
+)
+from fastapi.responses import FileResponse
+
+router = APIRouter(tags=["System"])  
+
+
+@router.get("/", summary="Root endpoint", response_model=MessageResponse)
+def home():
+    return MessageResponse(
+        status="success",
+        data=MessageData(message="Complaint-Severity API"),
+        errors=[],
+    )
+
+
+@router.get("/health", summary="Health check", response_model=HealthResponse)
+def health_check():
+    return HealthResponse(
+        status="success",
+        data=HealthData(status="OK"),
+        errors=[],
+    )
