@@ -1,7 +1,9 @@
+// Base API URL
+const API_BASE_URL = "/api";
+
 // Elements
 const apiDot = document.getElementById("apiDot");
 const healthDot = document.getElementById("healthDot");
-const apiStatusEl = document.getElementById("apiStatus");
 const complaintsInput = document.getElementById("complaintsInput");
 const predictBtn = document.getElementById("predictBtn");
 const predictionsEl = document.getElementById("predictions");
@@ -19,10 +21,10 @@ function updateStatusDots() {
 // Check API Status
 async function checkApiStatus() {
     try {
-        const statusRes = await fetch("http://localhost:8000/");
+        const statusRes = await fetch(`${API_BASE_URL}/`);
         const statusData = await statusRes.json();
 
-        const healthRes = await fetch("http://localhost:8000/health");
+        const healthRes = await fetch(`${API_BASE_URL}/health`);
         const healthData = await healthRes.json();
 
         apiStatus.running = statusData.status === "success";
@@ -50,7 +52,7 @@ predictBtn.addEventListener("click", async () => {
     const useCache = useCacheCheckbox.checked;
 
     try {
-        const res = await fetch(`http://localhost:8000/predict?use_cache=${useCache}`, {
+        const res = await fetch(`${API_BASE_URL}/predict?use_cache=${useCache}`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ texts }),

@@ -48,32 +48,35 @@ pip install -r requirements-dev.txt
 
 ---
 
-### 2. Run the API
+### 2. Run the API & Frontend
 
-Start the FastAPI server:
+Start the application (both API and frontend are served together):
 
 ```bash
-python -m uvicorn app:app --reload
+python app.py
 ```
 
-Access API documentation at:
-[http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
+- Acess Frontend at:
+  [http://127.0.0.1:8000](http://127.0.0.1:8000)
+
+- Access API documentation at:
+  [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
+
+- API endpoints are available under the /api prefix:
+
+  - Root: `/api/`
+
+  - Health check: `/api/health`
+
+  - Prediction: `/api/predict`
+
+> **Note:** No separate frontend server is required — everything runs via FastAPI.
 
 ---
 
-### 3. Run the Frontend
+### 3. Example API request
 
-Use a simple Python web server to serve the frontend:
-
-```bash
-python -m http.server 5500 --directory frontend
-```
-
-> **Note:** If you change the frontend port, update it in `./app.py` accordingly.
-
-### 4. Example API request
-
-### **POST** `/predict`
+### **POST** `/api/predict`
 
 #### **Request Body (Single Complaint)**
 

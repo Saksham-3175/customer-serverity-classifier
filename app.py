@@ -1,10 +1,13 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
 import logging
 from api.system import router as system_router
 from api.predict import router as predict_router
 from core.logging import setup_logging
 from core.exceptions import add_exception_handlers
+from fastapi.staticfiles import StaticFiles
+import os
 
 setup_logging()
 logger = logging.getLogger("core")
@@ -28,8 +31,16 @@ app.add_middleware(
 add_exception_handlers(app)
 logger.info("Application startup complete")
 
-app.include_router(system_router)
-app.include_router(predict_router)
+app.mount("/static", StaticFiles(directory="frontend"), name="frontend_static")
+
+
+@app.get("/", include_in_schema=False)
+def serve_frontend():
+    return FileResponse("frontend/index.html")
+
+
+app.include_router(system_router, prefix="/api")
+app.include_router(predict_router, prefix="/api")
 
 if __name__ == "__main__":
     import uvicorn
