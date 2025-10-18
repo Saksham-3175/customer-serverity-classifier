@@ -22,6 +22,8 @@ The trained model is exposed through a FastAPI service for integration with fron
 
 ## Setup Instructions
 
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/Saksham-3175/customer-serverity-classifier)
+
 ### 1. Environment Setup
 
 Create and activate a virtual environment:
