@@ -1,30 +1,31 @@
 # Customer Complaint Severity Classification
 
-## Objective
+## Overview
 
-Train a deep learning model to classify customer complaint severity into `low`, `medium`, or `high`.
-The trained model is exposed through a FastAPI service for integration with frontend or dashboard systems.
+This project provides a deep learning-based solution to classify customer complaints into three severity levels: `low`, `medium`, or `high`.  
+The trained model is served via a **FastAPI** backend with an integrated frontend for visualization and testing.
 
----
-
-## Project Overview
-
-### Pipeline
-
-1. **Data Preprocessing** – Clean complaint text, remove noise, and normalize text.
-2. **Weak Supervision** – Generate pseudo-labels (`low`, `medium`, `high`) using sentiment polarity and escalation keywords.
-3. **Model Training** – Train a Bidirectional LSTM classifier using TensorFlow/Keras.
-4. **Evaluation** – Assess model performance using accuracy, F1-score, and confusion matrix.
-5. **Deployment** – Serve the trained model via FastAPI.
-6. **Frontend Integration** – The development frontend consumes the API endpoint for severity visualization.
+The system is designed for seamless deployment, either locally, via Docker, or directly on cloud platforms like Render.
 
 ---
 
-## Setup Instructions
+## Features
 
-[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/Saksham-3175/customer-serverity-classifier)
+- **Deep Learning Model** – Bidirectional LSTM classifier for complaint severity.
+- **Integrated API & Frontend** – No separate frontend server required.
+- **Dockerized Deployment** – Pre-built Docker image or custom build.
+- **FastAPI Documentation** – Swagger UI available at `/docs`.
 
-### 1. Environment Setup
+---
+
+## Installation & Local Run
+
+Clone the repository:
+
+```bash
+git clone https://github.com/Saksham-3175/customer-serverity-classifier.git
+cd customer-serverity-classifier
+```
 
 Create and activate a virtual environment:
 
@@ -40,106 +41,76 @@ Install dependencies:
 pip install -r requirements.txt
 ```
 
-For development setup:
-
-```bash
-pip install -r requirements-dev.txt
-```
-
----
-
-### 2. Run the API & Frontend
-
-Start the application (both API and frontend are served together):
+Run the application:
 
 ```bash
 python app.py
 ```
 
-- Acess Frontend at:
-  [http://127.0.0.1:8000](http://127.0.0.1:8000)
+Access:
 
-- Access API documentation at:
-  [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
-
-- API endpoints are available under the /api prefix:
-
-  - Root: `/api/`
-
-  - Health check: `/api/health`
-
-  - Prediction: `/api/predict`
-
-> **Note:** No separate frontend server is required — everything runs via FastAPI.
+- **Frontend:** [http://127.0.0.1:8000](http://127.0.0.1:8000)
+- **API Docs:** [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
 
 ---
 
-### 3. Example API request
+## Deployment Options
 
-### **POST** `/api/predict`
+1. **Render (Automatic Deployment)**
 
-#### **Request Body (Single Complaint)**
+   Deploy directly using the repository via Render:
 
-```json
-{
-  "texts": ["My account was closed without prior notice."]
-}
-```
+   [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/Saksham-3175/customer-serverity-classifier)
 
-#### **Request Body (Multiple Complaints)**
+2. **Docker**
 
-```json
-{
-  "texts": [
-    "My account was closed without prior notice.",
-    "The product arrived damaged and customer support did not respond."
-  ]
-}
-```
+   - **Pre-built image:**
 
-#### **Response (Single or Multiple)**
+     ```bash
+     docker run -p 8000:8000 virajsh/customer-serverity-classifier:latest
+     ```
 
-```json
-{
-  "status": "success",
-  "data": {
-    "predictions": [
-      {
-        "severity": "high",
-        "confidence": 92.0,
-        "prediction_time_ms": 231.4,
-        "error": null
-      },
-      {
-        "severity": "medium",
-        "confidence": 85.5,
-        "prediction_time_ms": 245.7,
-        "error": null
-      }
-    ]
-  },
-  "errors": []
-}
-```
+   - **Build from Dockerfile:**
 
-**Notes:**
+     ```bash
+     docker build -t customer-severity-classifier .
+     docker run -p 8000:8000 customer-severity-classifier
+     ```
 
-- `texts` must be an array, even for a single complaint.
-- Each element in `predictions` corresponds **line-by-line** to the `texts` array.
-- `severity` is one of `"low"`, `"medium"`, `"high"`.
-- `confidence` is in percentage (0–100).
-- `prediction_time_ms` indicates inference time per request in milliseconds.
+3. **Local Run**
+
+   Simply run `python app.py` after installing dependencies (development environment).
 
 ---
 
 ## Model Details
 
-- Architecture: **Bidirectional LSTM**
-- Embedding Dim: `128`
-- LSTM Units: `96`
-- Dropout: `0.3`
-- Loss: `SparseCategoricalCrossentropy`
-- Optimizer: `Adam`
-- Evaluation: Accuracy, F1-score, Confusion Matrix
+- **Architecture:** Bidirectional LSTM
+- **Embedding Dimension:** 128
+- **LSTM Units:** 96
+- **Dropout:** 0.3
+- **Loss:** SparseCategoricalCrossentropy
+- **Optimizer:** Adam
+- **Evaluation Metrics:** Accuracy, F1-score, Confusion Matrix
+
+The model uses weak supervision with sentiment polarity and escalation keywords to generate pseudo-labels for `low`, `medium`, and `high` severity levels.
 
 ---
+
+## License
+
+This project is licensed under the **MIT License**. See [LICENSE](LICENSE) for details.
+
+---
+
+## Contributors
+
+See [CONTRIBUTORS.md](CONTRIBUTORS.md) for full team details and roles.
+
+---
+
+## Notes
+
+- API endpoints are automatically documented by FastAPI at `/docs`.
+- Frontend and backend run under the same application – no separate server is required.
+- Docker image is available publicly on Docker Hub: [`virajsh/customer-serverity-classifier:latest`](https://hub.docker.com/r/virajsh/customer-serverity-classifier/tags).

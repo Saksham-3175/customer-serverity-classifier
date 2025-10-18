@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: complaint-severity-api
+    name: customer-serverity-classifier
     env: python
     branch: master
     buildCommand: pip install -r requirements.txt
