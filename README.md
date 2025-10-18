@@ -64,29 +64,66 @@ Access API documentation at:
 Use a simple Python web server to serve the frontend:
 
 ```bash
-python -m http.server 5500
+python -m http.server 5500 --directory frontend
 ```
 
 > **Note:** If you change the frontend port, update it in `./app.py` accordingly.
 
 ### 4. Example API request
 
-**POST** `/predict`
+### **POST** `/predict`
+
+#### **Request Body (Single Complaint)**
 
 ```json
 {
-  "text": "My account was closed without prior notice."
+  "texts": ["My account was closed without prior notice."]
 }
 ```
 
-**Response**
+#### **Request Body (Multiple Complaints)**
 
 ```json
 {
-  "severity": "high",
-  "confidence": 0.92
+  "texts": [
+    "My account was closed without prior notice.",
+    "The product arrived damaged and customer support did not respond."
+  ]
 }
 ```
+
+#### **Response (Single or Multiple)**
+
+```json
+{
+  "status": "success",
+  "data": {
+    "predictions": [
+      {
+        "severity": "high",
+        "confidence": 92.0,
+        "prediction_time_ms": 231.4,
+        "error": null
+      },
+      {
+        "severity": "medium",
+        "confidence": 85.5,
+        "prediction_time_ms": 245.7,
+        "error": null
+      }
+    ]
+  },
+  "errors": []
+}
+```
+
+**Notes:**
+
+- `texts` must be an array, even for a single complaint.
+- Each element in `predictions` corresponds **line-by-line** to the `texts` array.
+- `severity` is one of `"low"`, `"medium"`, `"high"`.
+- `confidence` is in percentage (0–100).
+- `prediction_time_ms` indicates inference time per request in milliseconds.
 
 ---
 
